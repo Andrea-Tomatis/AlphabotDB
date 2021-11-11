@@ -1,0 +1,2 @@
+DUMMY = False
+BUF_SIZE = 4096
