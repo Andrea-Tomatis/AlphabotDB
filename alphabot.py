@@ -1,7 +1,16 @@
+'''
+RaspberryPi Alphabot: alphabot library.
+
+@Andrea-Tomatis
+@Nicolo-Cora
+'''
+
+
 import time
 import RPi.GPIO as GPIO
 
-
+# This class control the alphabot robot movements.
+# The server will execute this function when the client asks.
 class AlphaBot(object):
     
     def __init__(self, in1=13, in2=12, ena=6, in3=21, in4=20, enb=26):
