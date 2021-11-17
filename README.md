@@ -1,2 +1,4 @@
 # AlphabotDB
-Applicazione di comunicazione tra pc e alphabot. Il pc tramite il client invia i comandi, salvati nel database sqlite del server, che metteranno in movimento il robot
+Program to make a pc and an alphabot communicate.
+The clien sends commands to the server that will execute them.
+There are some predetermined movement sequences which are saved in an sqlite database on the robot.
