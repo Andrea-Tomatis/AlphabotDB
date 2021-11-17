@@ -1,13 +1,14 @@
 '''
-RaspberryPi Alphabot: server
+RaspberryPi Alphabot: server.
 
 @Andrea-Tomatis
+@Nicolo-Cora
 '''
 
 import socket as sck
 import threading as thr
 import config
-if config.DUMMY:
+if config.DUMMY:        # choise if it is teh case to use the test library or the real one
     from alphabot_dummy import AlphaBot
 else:
     from alphabot import AlphaBot
@@ -19,7 +20,7 @@ import battery
 lstClient = []
 
 
-
+# create a connection to interact with the database
 def create_connection(db_file):
     conn = None
     try:
@@ -29,7 +30,7 @@ def create_connection(db_file):
 
     return conn
 
-
+# thread class
 class Client_Manager(thr.Thread):
     def __init__(self, addr, conn):
         thr.Thread.__init__(self)
@@ -37,6 +38,7 @@ class Client_Manager(thr.Thread):
         self.conn = conn
         self.nickname = ''
         self.running = True
+        # dictionary with the list of possible commands
         self.commands = {'forward':robot.forward,
                          'backward':robot.backward,
                          'left' : robot.left,
@@ -47,10 +49,10 @@ class Client_Manager(thr.Thread):
                          'set_motor' : robot.set_motor}
     
     def run(self):
-        while self.running:
+        while self.running:     #execute the commands received by the client
             msg_received = self.conn.recv(config.BUF_SIZE)
             msg_received = msg_received.decode()
-            if len(msg_received.split(';')) > 1:
+            if len(msg_received.split(';')) > 1:        #if the message received has both the command and the duration, the alphabot will run the command (forward, backward,...)
                 com, duration = msg_received.split(';')
                 if com.startswith('exit') and self.running: 
                     self.running = False
@@ -60,7 +62,7 @@ class Client_Manager(thr.Thread):
                     if com in self.commands:
                         self.commands[com]()
                         response = com
-                        time.sleep(int(duration))
+                        time.sleep(int(duration))       #sleep for the duration of the command
                         robot.stop()
                     elif com == 'man':
                         response = 'command list:\n-forward\n-backward\n-left\n-right\n-stop\n-set_motor\n-set_pwm_a\n-set_pwm_b\n-battery'
@@ -68,12 +70,12 @@ class Client_Manager(thr.Thread):
             else:
                 if msg_received == "battery":
                     self.conn.sendall(battery.check_battery().encode())
-                else:
+                else:       #if the message received has only the command (≠ battery), the alphabot will run the DB sequence
                     cur = create_connection('./movimenti.db').cursor()
                     try:
                         cur.execute(f'SELECT sequenza FROM Movimenti WHERE nome = "{msg_received}"')
                         mov = cur.fetchall()
-                        mov = mov[0][0].split(';')
+                        mov = mov[0][0].split(';')  # the DB has this trace record: "command1_duration;command2_duration;..."
                         for m in mov:
                             m = m.split('_')
                             self.commands[m[0]]()
@@ -85,7 +87,7 @@ class Client_Manager(thr.Thread):
                         print(e)
 
  
-
+# accept new clients and ask for their nickname
 class Accettazione(thr.Thread):
     def __init__(self, s):
         thr.Thread.__init__(self)
@@ -105,7 +107,7 @@ class Accettazione(thr.Thread):
 
 def main():
     s = sck.socket(sck.AF_INET, sck.SOCK_STREAM)
-    s.bind(('192.168.0.134', 5001))
+    s.bind(('192.168.0.134', 5001))     # server address and port
     s.listen()
     
     global robot
