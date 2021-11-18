@@ -52,21 +52,20 @@ class Client_Manager(thr.Thread):
         while self.running:     #execute the commands received by the client
             msg_received = self.conn.recv(config.BUF_SIZE)
             msg_received = msg_received.decode()
+            if msg_received.startswith('exit'):
+                break
             if len(msg_received.split(';')) > 1:        #if the message received has both the command and the duration, the alphabot will run the command (forward, backward,...)
                 com, duration = msg_received.split(';')
-                if com.startswith('exit') and self.running: 
-                    self.running = False
-                else:
-                    print(f'{self.nickname}: {msg_received}')
-                    response = "error: invalid command"
-                    if com in self.commands:
-                        self.commands[com]()
-                        response = com
-                        time.sleep(int(duration))       #sleep for the duration of the command
-                        robot.stop()
-                    elif com == 'man':
-                        response = 'command list:\n-forward\n-backward\n-left\n-right\n-stop\n-set_motor\n-set_pwm_a\n-set_pwm_b\n-battery'
-                    self.conn.sendall(response.encode())
+                print(f'{self.nickname}: {msg_received}')
+                response = "error: invalid command"
+                if com in self.commands:
+                    self.commands[com]()
+                    response = com
+                    time.sleep(int(duration))       #sleep for the duration of the command
+                    robot.stop()
+                elif com == 'man':
+                    response = 'command list:\n-forward\n-backward\n-left\n-right\n-stop\n-set_motor\n-set_pwm_a\n-set_pwm_b\n-battery'
+                self.conn.sendall(response.encode())
             else:
                 if msg_received == "battery":
                     self.conn.sendall(battery.check_battery().encode())
