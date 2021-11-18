@@ -8,10 +8,10 @@ This is the project scheme:
 
 The db structure is:
 
-|name|command|
-|:-|:-:|
-|slalom|command1_duration;command2_duration;...|
-|...|...|
+|id|name|command|
+|-:|:-|:-:|
+|1|slalom|command1_duration;command2_duration;...|
+|2|...|...|
 
 
 Nicolo' Cora - Andrea Tomatis
