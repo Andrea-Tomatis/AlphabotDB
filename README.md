@@ -12,3 +12,6 @@ The db structure is:
 |:-|:-:|
 |slalom|command1_duration;command2_duration;...|
 |...|...|
+
+
+Nicolo' Cora - Andrea Tomatis
