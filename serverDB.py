@@ -85,6 +85,7 @@ class Client_Manager(thr.Thread):
                     except Exception as e:
                         self.conn.sendall(f'error executing {msg_received}'.encode())
                         print(e)
+                    cur.close()
 
  
 # accept new clients and ask for their nickname
@@ -119,6 +120,7 @@ def main():
     while True:
         for c in lstClient:
             if not c.running:
+                c.running = False
                 c.conn.close()
                 c.join()
                 lstClient.remove(c)
