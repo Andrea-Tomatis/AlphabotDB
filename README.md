@@ -14,4 +14,12 @@ The db structure is:
 |2|...|...|
 
 
+```
+CREATE TABLE "Movimenti" (
+	"id"	INTEGER NOT NULL,
+	"nome"	TEXT NOT NULL UNIQUE,
+	"sequenza"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+```
 Nicolo' Cora - Andrea Tomatis
