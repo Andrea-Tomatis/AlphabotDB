@@ -58,7 +58,7 @@ class Client_Manager(thr.Thread):
                     self.running = False
                 else:
                     print(f'{self.nickname}: {msg_received}')
-                    
+                    response = "error: invalid command"
                     if com in self.commands:
                         self.commands[com]()
                         response = com
