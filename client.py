@@ -36,9 +36,8 @@ def type_command():
         body = com + ";" + str(duration)
     else:
         body = com
-       
-    body.encode()
-    return body
+    
+    return body.encode()
     
     
     
