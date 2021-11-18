@@ -8,7 +8,7 @@ RaspberryPi Alphabot: server.
 import socket as sck
 import threading as thr
 import config
-if config.DUMMY:        # choise if it is teh case to use the test library or the real one
+if config.DUMMY:        # chooses if it is necessary to use the test library or the real one
     from alphabot_dummy import AlphaBot
 else:
     from alphabot import AlphaBot
